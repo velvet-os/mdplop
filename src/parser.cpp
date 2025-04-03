@@ -341,7 +341,7 @@ public:
             return false;
         pop(); //[
 
-        std::cout << "paring image " << seek().data << std::endl;
+        // std::cout << "paring image " << seek().data << std::endl;
 
         std::string title = "";
         if (seek().type != token::closeSqrBracket)
@@ -390,10 +390,10 @@ std::string parse(std::string content)
 {
     auto tokens = lex(content);
 
-    for (token t : tokens)
-    {
-        t.print();
-    }
+    // for (token t : tokens)
+    // {
+    //     t.print();
+    // }
 
     return pars(tokens).out;
 }

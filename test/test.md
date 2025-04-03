@@ -1,5 +1,6 @@
 ```lang
 code block
+should work
 ```
 
 this is ```static text```
