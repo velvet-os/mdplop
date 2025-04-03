@@ -72,6 +72,10 @@ std::vector<token> lex(std::string content)
                 out.push_back(token(token::apostrophe,"*"));
             }
             continue;
+        case '!':
+            flush();
+            out.push_back(token(token::exclamation,"!"));
+            continue;
         case '_':
             flush();
             out.push_back(token(token::flor,"_"));
@@ -84,12 +88,17 @@ std::vector<token> lex(std::string content)
             flush();
             out.push_back(token(token::dot,"."));
             continue;
+        case '-':
+            flush();
+            out.push_back(token(token::dash,"-"));
+            continue;
         case '\n':
             flush();
             out.push_back(token(token::newline,"\\n"));
             continue;
         case 0:
             flush();
+            out.push_back(token(token::eof,"eof"));
             return out;
         }
         tmp += c;

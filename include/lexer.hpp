@@ -11,13 +11,17 @@ class token{
             apostrophe,
             triApostrophe,
             star,//*
+            exclamation,
             triStar,
             flor,
             hashtag,
             dot,
+            dash,
+            relaticeLink,
             text,
             word,
-            newline
+            newline,
+            eof//end of file
         } type;
         token(tokenType t,std::string d = "");
         std::string data;

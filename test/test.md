@@ -25,4 +25,4 @@ _cursive_
 this _has. to start on new line 
 _special. text_
 
-these are supposed to be supported but currently aint
+these are supposed to be supported but currently
