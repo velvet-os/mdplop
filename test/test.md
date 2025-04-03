@@ -10,7 +10,6 @@ this is ```static text```
 
 ![image](./test.png)
 
-
 - bullet points
 
 - _yet_
@@ -23,7 +22,10 @@ this is ```static text```
 
 _cursive_
 
-this _has. to start on new line 
+this has to start on new line 
 _Note. text_
+_Info. text_
+_Tip. text_
+_Warning. text_
 
 these _*are supposed* to_ be supported but currently

@@ -39,6 +39,7 @@ public:
     }
     void htmlLink(std::string text, std::string url)
     {
+        out += "<a href=\""+url+"\">"+text+"</a>";
     }
 
     int cursive = 0; // 0 no, 1 outer, 2 inner
@@ -57,9 +58,6 @@ public:
             if (t.type == token::eof)
                 break;
             
-            //to-do
-            //links
-            //special
             switch (t.type)
             {
             case token::newline:
@@ -76,6 +74,9 @@ public:
             case token::triApostrophe:
                 parserTriApostrophy();
                 break;
+            case token::openSqrBracket:
+                parseLink();
+                break;
             case token::flor: // add special support
                 parseFlor();
                 break;
@@ -90,40 +91,98 @@ public:
         closeMode();
         htmlClose("p");
     }
+    void parseLink()
+    {
+        std::string text = "";
+        std::string url = "";
+        bool local = false;
+        while (true)
+        {
+            token t = pop();
+            if (t.type == token::newline)
+                error("expected ] after [" + text);
+
+            if (t.type == token::eof)
+                error("expected ] after [" + text);
+
+            if (t.type == token::closeSqrBracket)
+                break;
+
+            text += t.data;
+        }
+
+        if (text == "")
+            error("[] is empty");
+
+        if (pop().type != token::openCircleBracket)//(
+            error("expected ( after [" + text + "]");
+        
+        if(seek().type==token::dot)
+            local = true;
+        
+        while (true)
+        {
+            token t = pop();
+            if (t.type == token::newline)
+                error("expected ) after [" + text+"]("+url);
+
+            if (t.type == token::eof)
+                error("expected ) after [" + text+"]("+url);
+
+            if (t.type == token::closeCircleBracket)
+                break;
+            
+            if(t.type == token::dot&&seek().type==token::word&&seek(1).type==token::closeCircleBracket){
+                if(local&&seek().data=="md"){
+                    pop();//md
+                    url += ".html";
+                    continue;
+                }
+            }
+
+            url += t.data;
+        }
+
+        htmlLink(text,url);
+    }
     bool tryParseHashtag()
     {
         if (seek(-2).type != token::newline)
             return false;
 
         int lvl = 0;
-        while(seek().type==token::hashtag){
+        while (seek().type == token::hashtag)
+        {
             lvl++;
             pop();
         }
 
-        htmlOpen("header","l"+std::to_string(lvl));
+        htmlOpen("header", "l" + std::to_string(lvl));
         header = true;
         return true;
     }
-    bool tryParseSpecial(){
-        if(seek(-1).type!=token::newline||seek().type!=token::word||seek(1).type!=token::dot)
+    bool tryParseSpecial()
+    {
+        if (seek(-2).type != token::newline || seek().type != token::word || seek(1).type != token::dot)
             return false;
         std::string type = pop().data;
-        htmlOpen("special","type");
+        htmlOpen("special", type);
+        htmlOpen("bold");
         out += type;
         out += ".";
-        pop();//.
+        htmlClose("bold");
+        pop(); //.
 
         cursive = bold + 1;
         special = true;
-        
+
         return true;
     }
     void parseFlor()
     {
-        if(tryParseSpecial())
+        if (tryParseSpecial())
             return;
-        
+
         if (!cursive)
         {
             cursive = bold + 1;
@@ -133,10 +192,11 @@ public:
         {
             if (bold == 2)
                 error("incorrect _/* nesting");
-            
-            if(special)
+
+            if (special)
                 htmlClose("special");
-            else htmlClose("cur");
+            else
+                htmlClose("cur");
 
             special = false;
 
@@ -179,9 +239,9 @@ public:
     }
     void closeMode()
     {
-        if(special)
+        if (special)
             error("special section has to be one line long");
-        
+
         if (bold || cursive)
         {
             if (bold > cursive)
@@ -224,7 +284,7 @@ public:
             parseBlock();
             return;
         }
-        
+
         htmlOpen("raw");
 
         token t = seek();

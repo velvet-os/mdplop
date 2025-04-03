@@ -28,6 +28,64 @@ raw{
     background-color: rgb(59, 59, 59);
     border-radius: 1mm;
 }
+
+block{
+    white-space: pre-line;
+    display: block;
+    padding: 2mm;
+    border-radius: 2mm;
+    width:fit-content;
+    min-width: 50%;
+
+    border-style: solid;
+    border-color: rgb(29, 29, 29);
+
+    transition: border-color 100ms;
+
+    background-color: rgb(63, 63, 63);
+}
+
+special{
+    white-space: pre-line;
+    display: block;
+    padding: 2mm;
+    border-radius: 2mm;
+    width:fit-content;
+    min-width: 50%;
+
+    border-style: solid;
+    border-color: rgb(29, 29, 29);
+
+    transition: border-color 100ms;
+
+    background-color: rgb(63, 63, 63);
+}
+special#Note{
+    color: black;
+    border-color: rgb(228, 255, 26);
+    background-color: rgb(161, 193, 0);
+}
+special#Info{
+    color: white;
+    border-color: rgb(0, 129, 184);
+    background-color: rgba(0, 101, 208, 0.614);
+}
+special#Tip{
+    color: rgb(255, 255, 255);
+    border-color: rgb(0, 184, 18);
+    background-color: rgba(26, 225, 0, 0.614);
+}
+special#Warning{
+    color: rgb(255, 251, 0);
+    border-color: rgb(184, 0, 0);
+    background-color: rgba(255, 50, 35, 0.614);
+}
+
+a{
+    text-decoration: none;
+    color: rgb(0, 170, 255);
+}
+
 cur{
     font-style: italic;
 }
