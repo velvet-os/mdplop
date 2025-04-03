@@ -56,6 +56,11 @@
         "sstream": "cpp",
         "codecvt": "cpp",
         "iomanip": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "cstdarg": "cpp",
+        "hash_map": "cpp",
+        "chrono": "cpp",
+        "list": "cpp",
+        "source_location": "cpp"
     }
 }

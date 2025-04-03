@@ -67,9 +67,9 @@ std::vector<token> lex(std::string content)
             flush();
             if(data.seekMatch("**")){//are there 2 more?
                 data.pop(2);
-                out.push_back(token(token::triApostrophe,"***"));
+                out.push_back(token(token::triStar,"***"));
             }else{
-                out.push_back(token(token::apostrophe,"*"));
+                out.push_back(token(token::star,"*"));
             }
             continue;
         case '!':

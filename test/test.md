@@ -2,13 +2,13 @@
 code block
 ```
 
-```static text```
+this is ```static text```
 
 [link](url)
 
 [relative link](./url.md)
 
-![image](url)
+![image](./test.png)
 
 
 - bullet points
@@ -16,13 +16,14 @@ code block
 - _yet_
 
 # header
-# [link](url)
+### smaller
+## [link](url)
 
 *bold*
 
 _cursive_
 
 this _has. to start on new line 
-_special. text_
+_Note. text_
 
-these are supposed to be supported but currently
+these _*are supposed* to_ be supported but currently
