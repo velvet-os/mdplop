@@ -4,8 +4,6 @@ code block
 
 ```static text```
 
-https://link
-
 [link](url)
 
 [relative link](./url.md)
@@ -15,12 +13,16 @@ https://link
 
 - bullet points
 
+- _yet_
+
 # header
+# [link](url)
 
 *bold*
 
-_special. text_
+_cursive_
 
-@user
+this _has. to start on new line 
+_special. text_
 
 these are supposed to be supported but currently aint

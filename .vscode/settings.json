@@ -38,6 +38,24 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "algorithm": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "utility": "cpp",
+        "cstring": "cpp",
+        "atomic": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp",
+        "functional": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "codecvt": "cpp",
+        "iomanip": "cpp",
+        "ratio": "cpp"
     }
 }

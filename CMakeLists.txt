@@ -10,5 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include/)
 add_executable(mdplop
     src/main.cpp
+    src/fs.cpp
+    src/text.cpp
     src/parser.cpp
+    src/lexer.cpp
 )
