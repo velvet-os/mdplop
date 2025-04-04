@@ -1,6 +1,8 @@
 #include "fs.hpp"
 #include "text.hpp"
 
+#include <iostream>
+
 std::string readFile(std::string path) {
     std::ifstream file(path);
     std::stringstream stream;
@@ -29,6 +31,17 @@ std::string file::getFilename(){
 std::string file::readContent() {
     return readFile(path);
 }
+
+void file::createDirectory(){
+    std::filesystem::create_directories(std::filesystem::path(path).parent_path());
+};
+void file::copy(std::string path){
+    std::filesystem::copy(this->path,path);
+};
+
+void file::remove(){
+    std::filesystem::remove(path);
+};
 
 dir::dir(std::string path) {
     if (path.ends_with("/"))

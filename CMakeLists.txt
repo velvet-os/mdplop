@@ -5,8 +5,6 @@ Project(mdplop)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-
 include_directories(include/)
 add_executable(mdplop
     src/main.cpp
@@ -15,3 +13,5 @@ add_executable(mdplop
     src/parser.cpp
     src/lexer.cpp
 )
+
+target_link_libraries(mdplop -static)#portable

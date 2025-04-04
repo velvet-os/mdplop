@@ -17,6 +17,9 @@ public:
     std::string readContent();
     std::string getExtension();
     std::string getFilename();
+    void createDirectory();
+    void copy(std::string path);
+    void remove();
 };
 
 class dir {
