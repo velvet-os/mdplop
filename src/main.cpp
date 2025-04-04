@@ -3,7 +3,7 @@
 #include <exception>
 #include "parser.hpp"
 
-std::string input = "../test";
+std::string input = "../doc";
 std::string output = "../output";
 std::string def;
 
@@ -33,6 +33,16 @@ void generateHTML(std::string path)
     file(path).createDirectory();
     std::cout << "saving " << path << std::endl;
     writeFile(path, out);
+
+    if(path.ends_with("readme.html")){
+        std::string ipath = path;
+
+        ipath = ipath.replace(ipath.size()-11,11,"index.html");
+        std::cout << "symlinking "+ipath+" to ./readme.html" << std::endl;
+
+        file(ipath).remove();//in case there already is one
+        std::filesystem::create_symlink("./readme.html",ipath);
+    }
 }
 void move(file f)
 {
@@ -41,6 +51,7 @@ void move(file f)
     
     
     file(path).remove();//in case there already is one
+    file(path).createDirectory();//in case there already is one
     std::cout << "copying "+f.path+" to "+path << std::endl;
     f.copy(path);
 }
@@ -67,7 +78,7 @@ int main(int argc, char **args)
     else
     {
         std::cout << "provide input and output" << std::endl;
-        return 0;
+        // return 0;
     }
 
     std::cout << "loading default html " + input + "/default.html" << std::endl;

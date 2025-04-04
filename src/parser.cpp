@@ -9,15 +9,22 @@ public:
     std::string out;
     std::vector<token> tokens;
 
+    int lastoperated = 0;
+
     token pop()
     {
+        if (i >= tokens.size())
+            return token(token::eof);
         i++;
+
         return tokens[i - 1];
     }
     token seek(int off = 0)
     {
         if (i + off < 0)
             return token(token::newline, "\\n");
+        if (i + off >= tokens.size())
+            return token(token::eof);
         return tokens[i + off];
     }
 
@@ -39,7 +46,7 @@ public:
     }
     void htmlLink(std::string text, std::string url)
     {
-        out += "<a href=\""+url+"\">"+text+"</a>";
+        out += "<a href=\"" + url + "\">" + text + "</a>";
     }
 
     int cursive = 0; // 0 no, 1 outer, 2 inner
@@ -57,7 +64,7 @@ public:
             token t = pop();
             if (t.type == token::eof)
                 break;
-            
+
             switch (t.type)
             {
             case token::newline:
@@ -112,29 +119,35 @@ public:
         }
 
         if (text == "")
-            error("[] is empty");
+            warning("[] is empty");
 
-        if (pop().type != token::openCircleBracket)//(
-            error("expected ( after [" + text + "]");
-        
-        if(seek().type==token::dot)
+        if (pop().type != token::openCircleBracket)
+        {
+            out += "![" + text + "]";
+            warning("begining of link declaration without a link ![" + text + "] treating as text");
+            return;
+        }
+
+        if (seek().type == token::dot)
             local = true;
-        
+
         while (true)
         {
             token t = pop();
             if (t.type == token::newline)
-                error("expected ) after [" + text+"]("+url);
+                error("expected ) after [" + text + "](" + url);
 
             if (t.type == token::eof)
-                error("expected ) after [" + text+"]("+url);
+                error("expected ) after [" + text + "](" + url);
 
             if (t.type == token::closeCircleBracket)
                 break;
-            
-            if(t.type == token::dot&&seek().type==token::word&&seek(1).type==token::closeCircleBracket){
-                if(local&&seek().data=="md"){
-                    pop();//md
+
+            if (t.type == token::dot && seek().type == token::word && seek(1).type == token::closeCircleBracket)
+            {
+                if (local && seek().data == "md")
+                {
+                    pop(); // md
                     url += ".html";
                     continue;
                 }
@@ -143,7 +156,7 @@ public:
             url += t.data;
         }
 
-        htmlLink(text,url);
+        htmlLink(text, url);
     }
     bool tryParseHashtag()
     {
@@ -277,9 +290,12 @@ public:
 
     void parserTriApostrophy()
     {
+        lastoperated = i-1;
         token::tokenType next = seek().type;
         token::tokenType next2 = seek(1).type;
-        if ((next == token::word && next2 == token::newline) || next == token::newline)
+        //-1```
+        token::tokenType prev = seek(-2).type;//\n
+        if (prev==token::newline&&((next == token::word && next2 == token::newline) || next == token::newline))
         {
             parseBlock();
             return;
@@ -290,6 +306,11 @@ public:
         token t = seek();
         while ((t = pop()).type != token::triApostrophe)
         {
+            if (t.type == token::eof)
+            {
+                error("``` never ended");
+            }
+
             if (t.type == token::newline)
             {
                 htmlClose("raw");
@@ -307,10 +328,8 @@ public:
     void parseBlock()
     {
         closeMode();
-        if (seek().type != token::newline)
-        {
+        if(seek().type==token::word)
             htmlOpen("block", pop().data);
-        }
         else
             htmlOpen("block");
 
@@ -344,14 +363,27 @@ public:
         // std::cout << "paring image " << seek().data << std::endl;
 
         std::string title = "";
-        if (seek().type != token::closeSqrBracket)
-            title = pop().data;
+        while (true)
+        {
+            token t = pop();
+            if (t.type == token::newline)
+                error("expected ] after [" + title);
 
-        if (pop().type != token::closeSqrBracket)
-            error("expected ] after " + seek(-3).data + seek(-2).data);
+            if (t.type == token::eof)
+                error("expected ] after [" + title);
+
+            if (t.type == token::closeSqrBracket)
+                break;
+
+            title += t.data;
+        }
 
         if (pop().type != token::openCircleBracket)
-            error("expected ( after " + seek(-4).data + seek(-3).data + seek(-2).data);
+        {
+            out += "![" + title + "]";
+            warning("begining of image declaration without a link ![" + title + "] treating as text");
+            return true;
+        }
 
         std::string url = "";
 
@@ -381,6 +413,12 @@ public:
     }
     void error(std::string error)
     {
+        std::cout << "[data dump] " << out;
+        std::cout << "[token dump] last operated" << std::endl;
+        for (int i =lastoperated;i<tokens.size();i++)
+        {
+            tokens[i].print();
+        }
         std::cout << "[error] " << error << std::endl;
         throw std::runtime_error(error);
     }
@@ -390,10 +428,7 @@ std::string parse(std::string content)
 {
     auto tokens = lex(content);
 
-    // for (token t : tokens)
-    // {
-    //     t.print();
-    // }
-
     return pars(tokens).out;
+    
+    return "";
 }
