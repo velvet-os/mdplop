@@ -126,6 +126,7 @@ public:
             out += "[" + text + "]";
             return;
         }
+        pop();//(
 
         if (seek().type == token::dot)
             local = true;
@@ -383,6 +384,7 @@ public:
             warning("begining of image declaration without a link ![" + title + "] treating as text");
             return true;
         }
+        pop();//(
 
         std::string url = "";
 
