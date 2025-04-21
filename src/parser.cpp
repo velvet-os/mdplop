@@ -121,10 +121,9 @@ public:
         if (text == "")
             warning("[] is empty");
 
-        if (pop().type != token::openCircleBracket)
+        if (seek().type != token::openCircleBracket)
         {
-            out += "![" + text + "]";
-            warning("begining of link declaration without a link ![" + text + "] treating as text");
+            out += "[" + text + "]";
             return;
         }
 
@@ -378,7 +377,7 @@ public:
             title += t.data;
         }
 
-        if (pop().type != token::openCircleBracket)
+        if (seek().type != token::openCircleBracket)
         {
             out += "![" + title + "]";
             warning("begining of image declaration without a link ![" + title + "] treating as text");
