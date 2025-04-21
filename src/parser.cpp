@@ -87,6 +87,9 @@ public:
             case token::flor: // add special support
                 parseFlor();
                 break;
+            case token::linkliteral:
+                htmlLink(t.data,t.data);
+                break;
             case token::star:
                 parseStar();
                 break;
@@ -428,6 +431,10 @@ public:
 std::string parse(std::string content)
 {
     auto tokens = lex(content);
+
+    if(getenv("DEBUG")!=nullptr){
+        for(auto token : tokens) token.print();
+    }
 
     return pars(tokens).out;
     

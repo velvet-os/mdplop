@@ -21,6 +21,7 @@ class token{
             text,
             word,
             newline,
+            linkliteral,
             eof//end of file
         } type;
         token(tokenType t,std::string d = "");

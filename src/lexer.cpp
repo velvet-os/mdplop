@@ -96,6 +96,22 @@ std::vector<token> lex(std::string content)
             flush();
             out.push_back(token(token::newline,"\\n"));
             continue;
+        case 'h':
+            if(data.seekMatch("ttps://")){
+                flush();
+                tmp+=c;
+                while (data.seek()!=' '&&data.seek()!='\n'&&data.seek()!=0){
+                    c = data.pop();
+                    tmp += c;
+                }
+
+                out.push_back(token(token::linkliteral,tmp));
+                tmp = "";
+                continue;
+            }
+            
+            tmp += c;
+            continue;
         case 0:
             flush();
             out.push_back(token(token::eof,"eof"));
