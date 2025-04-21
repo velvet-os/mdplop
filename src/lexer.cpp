@@ -97,7 +97,7 @@ std::vector<token> lex(std::string content)
             out.push_back(token(token::newline,"\\n"));
             continue;
         case 'h':
-            if(data.seekMatch("ttps://")){
+            if(data.seekMatch("ttps://")&&(data.seek(-2)==' '||data.seek(-2)=='\n')){
                 flush();
                 tmp+=c;
                 while (data.seek()!=' '&&data.seek()!='\n'&&data.seek()!=0){
