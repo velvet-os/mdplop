@@ -100,7 +100,7 @@ std::vector<token> lex(std::string content)
             if(data.seekMatch("ttps://")&&(data.seek(-2)==' '||data.seek(-2)=='\n')){
                 flush();
                 tmp+=c;
-                while (data.seek()!=' '&&data.seek()!='\n'&&data.seek()!=0){
+                while (data.seek()!=' '&&data.seek()!='\n'&&data.seek()!=0&&data.seek()!='*'){
                     c = data.pop();
                     tmp += c;
                 }
