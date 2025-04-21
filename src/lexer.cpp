@@ -65,12 +65,12 @@ std::vector<token> lex(std::string content)
             continue;
         case '*':
             flush();
-            if(data.seekMatch("**")){//are there 2 more?
-                data.pop(2);
-                out.push_back(token(token::triStar,"***"));
-            }else{
-                out.push_back(token(token::star,"*"));
+            if(data.seekMatch("*")){//are there 2 more?
+                data.pop(1);
+                out.push_back(token(token::star,"**"));
+                continue;
             }
+            tmp += c;
             continue;
         case '!':
             flush();
