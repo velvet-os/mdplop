@@ -84,8 +84,11 @@ public:
             case token::openSqrBracket:
                 parseLink();
                 break;
-            case token::flor: // add special support
-                parseFlor();
+            case token::openFlor: // add special support
+                parseOpenFlor();
+                break;
+            case token::closeFlor: // add special support
+                parseCloseFlor();
                 break;
             case token::linkliteral:
                 htmlLink(t.data,t.data);
@@ -100,6 +103,45 @@ public:
 
         closeMode();
         htmlClose("p");
+    }
+
+    void parseOpenFlor()
+    {
+        if (tryParseSpecial())
+            return;
+
+        if (cursive)
+        {
+            warning("double open cursive");
+        }
+        else
+        {
+            cursive = bold + 1;
+            htmlOpen("cur");
+        }
+    }
+    void parseCloseFlor()
+    {
+
+        if (!cursive)
+        {
+            out+="_";
+            return;
+        }
+        else
+        {
+            if (bold == 2)
+                error("incorrect _/* nesting");
+
+            if (special)
+                htmlClose("special");
+            else
+                htmlClose("cur");
+
+            special = false;
+
+            cursive = 0;
+        }
     }
     void parseLink()
     {
@@ -193,31 +235,6 @@ public:
         special = true;
 
         return true;
-    }
-    void parseFlor()
-    {
-        if (tryParseSpecial())
-            return;
-
-        if (!cursive)
-        {
-            cursive = bold + 1;
-            htmlOpen("cur");
-        }
-        else
-        {
-            if (bold == 2)
-                error("incorrect _/* nesting");
-
-            if (special)
-                htmlClose("special");
-            else
-                htmlClose("cur");
-
-            special = false;
-
-            cursive = 0;
-        }
     }
     void parseStar()
     {

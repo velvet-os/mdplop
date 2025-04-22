@@ -14,6 +14,10 @@ void token::print()
     std::cout << type << ": " << this->data << std::endl;
 };
 
+constexpr bool isWhitespace(char c){
+    return c==' '||c=='\n'||c=='\0';
+}
+
 std::vector<token> lex(std::string content)
 {
     std::vector<token> out;
@@ -77,8 +81,13 @@ std::vector<token> lex(std::string content)
             out.push_back(token(token::exclamation,"!"));
             continue;
         case '_':
-            flush();
-            out.push_back(token(token::flor,"_"));
+            if(!isWhitespace(data.seek(-2))&&isWhitespace(data.seek())){
+                flush();
+                out.push_back(token(token::closeFlor,"_"));
+            }else if(isWhitespace(data.seek(-2))&&!isWhitespace(data.seek())){
+                flush();
+                out.push_back(token(token::openFlor,"_"));
+            }else tmp += c;
             continue;
         case '#':
             flush();

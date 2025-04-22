@@ -13,7 +13,8 @@ class token{
             star,//*
             exclamation,
             triStar,
-            flor,
+            openFlor,
+            closeFlor,
             hashtag,
             dot,
             dash,
